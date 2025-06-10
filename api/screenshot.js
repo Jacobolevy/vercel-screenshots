@@ -21,18 +21,20 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const fileIdMatch = figmaFileUrl.match(/\/(file|design)\/([^/]+)\/?/);
-    if (!fileIdMatch || !fileIdMatch[2]) {
+    // Normaliza la URL para que /design/ pase a /file/
+    const normalizedUrl = figmaFileUrl.replace('/design/', '/file/');
+
+    // Regex para extraer el ID del archivo
+    const fileIdMatch = normalizedUrl.match(/\/file\/([^/]+)\/?/);
+    if (!fileIdMatch || !fileIdMatch[1]) {
       return res.status(400).json({ error: 'Invalid Figma file URL.' });
     }
-    const figmaFileId = fileIdMatch[2];
+    const figmaFileId = fileIdMatch[1];
 
     const figmaApiResponse = await axios.get(`https://api.figma.com/v1/files/${figmaFileId}`, {
       headers: { 'X-Figma-Token': FIGMA_ACCESS_TOKEN }
     });
     const figmaData = figmaApiResponse.data;
-
-    let targetNodeId = null;
 
     function findNodeByText(nodes, searchText) {
       if (!nodes) return null;
@@ -53,7 +55,7 @@ module.exports = async (req, res) => {
       if (pageNode) searchScopeNodes = pageNode.children;
     }
 
-    targetNodeId = findNodeByText(searchScopeNodes, keyText);
+    const targetNodeId = findNodeByText(searchScopeNodes, keyText);
     if (!targetNodeId) {
       return res.status(404).json({ error: 'Figma node not found for the specified text.', key: keyText });
     }
