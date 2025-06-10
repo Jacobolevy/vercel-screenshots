@@ -36,6 +36,9 @@ module.exports = async (req, res) => {
     });
     const figmaData = figmaApiResponse.data;
 
+    console.log('Figma API Response (primeros 1000 caracteres):', JSON.stringify(figmaData, null, 2).substring(0, 1000));
+
+
     function findNodeByText(nodes, searchText) {
       if (!nodes) return null;
       for (const node of nodes) {
@@ -68,6 +71,8 @@ module.exports = async (req, res) => {
     if (!figmaRenderedImageUrl) {
       return res.status(500).json({ error: 'Could not get Figma rendered image URL for the node.' });
     }
+    // Justo después de verificar que la imagen existe
+    console.log('URL a subir a Cloudinary:', figmaRenderedImageUrl);
 
     const publicId = `${keyText.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50)}_${Date.now()}`;
     const cloudinaryUploadResult = await cloudinary.uploader.upload(figmaRenderedImageUrl, {
