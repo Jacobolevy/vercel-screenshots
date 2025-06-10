@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "api/screenshot.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/screenshot",
+      "destination": "/api/screenshot.js"
+    }
+  ]
+}
