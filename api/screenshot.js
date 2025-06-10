@@ -36,7 +36,7 @@ app.post('/api/screenshot', async (req, res) => {
       console.error(`Error: URL de Figma inválida: ${figmaFileUrl}`);
       return res.status(400).json({ error: 'Invalid Figma file URL.' });
     }
-    const figmaFileId = fileIdMatch[1];
+    const figmaFileId = fileIdMatch[2];
 
     // 2. Obtener los datos del archivo de Figma para buscar el nodo (capa/texto)
     const figmaApiResponse = await axios.get(`https://api.figma.com/v1/files/${figmaFileId}`, {
