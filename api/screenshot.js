@@ -31,7 +31,7 @@ app.post('/api/screenshot', async (req, res) => {
 
   try {
     // 1. Extraer el ID del archivo de Figma de la URL proporcionada
-    const fileIdMatch = figmaFileUrl.match(/\/(file|design)\/([a-zA-Z0-9]+)\//);
+    const fileIdMatch = figmaFileUrl.match(/\/(file|design)\/([a-zA-Z0-9]+)\/?/);
     if (!fileIdMatch) {
       console.error(`Error: URL de Figma inválida: ${figmaFileUrl}`);
       return res.status(400).json({ error: 'Invalid Figma file URL.' });
